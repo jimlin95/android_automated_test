@@ -11,7 +11,7 @@ def enable_developer_setting(self, name):
 			child(className="android.widget.CheckBox")
 
 	if checkbox.checked == False:
-		print (name + "not enabled, enabling it")
+		print (name + " is not enabled, enabling it")
 		checkbox.click()
 	else:
 		print(name + " enabled")
