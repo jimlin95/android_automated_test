@@ -1,0 +1,3 @@
+[submodule "uiautomator_src"]
+	path = uiautomator_src
+	url = https://github.com/xiaocong/uiautomator.git
