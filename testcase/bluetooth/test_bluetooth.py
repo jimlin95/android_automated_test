@@ -22,41 +22,32 @@ class TestBluetooth(object):
         self.d.press.home()
     def teardown(self):
         """This method is run once after _each_ test method is executed"""
+
     def test_TurnOffBluetooth(self):
         print("Test to turn off bluetooth")
         # Turn off bluetooth 
-        self.d.server.adb.cmd("shell am start -n com.android.settings/.Settings").communicate()
-
+        self.d.server.adb.cmd("shell am start -a android.intent.action.MAIN -n com.android.settings/.bluetooth.BluetoothSettings"). \
+                communicate()
         self.d.wait.update()
-        BT_SW=self.d(className="android.widget.ListView", resourceId="android:id/list") \
-                .child_by_text("Bluetooth", className="android.widget.LinearLayout") \
-                .child(className="android.widget.Switch")
+        if self.d(text="ON").exists:
+            self.d(text="ON").click()
+            sleep(3)
+        self.d.wait.update()
 
-        OnOff=BT_SW.text
-        if OnOff == "ON":
-            BT_SW.click()
-            self.d.wait.update()
+        assert self.d(text="OFF").exists
 
-        OnOff=BT_SW.text
-        assert_equal(OnOff,u"OFF")
     def test_TurnOnBluetooth(self):
-        print("Test to turn on bluetooth")
-        # Turn on bluetooth 
-        self.d.server.adb.cmd("shell am start -n com.android.settings/.Settings").communicate()
+        print("Test to turn off bluetooth")
+        # Turn off bluetooth 
+        self.d.server.adb.cmd("shell am start -a android.intent.action.MAIN -n com.android.settings/.bluetooth.BluetoothSettings"). \
+                communicate()
         self.d.wait.update()
-        BT_SW=self.d(className="android.widget.ListView", resourceId="android:id/list") \
-                .child_by_text("Bluetooth", className="android.widget.LinearLayout") \
-                .child(className="android.widget.Switch")
-
-        OnOff=BT_SW.text
-
-        if OnOff == "OFF":
-            BT_SW.click()
-            self.d.wait.update()
-
-        OnOff= BT_SW.text
-        assert_equal(OnOff,u"ON")
-
+        if self.d(text="OFF").exists:
+            self.d(text="OFF").click()
+            sleep(3)
+        self.d.wait.update()
+ 
+        assert self.d(text="ON").exists
 
     def test_Search_Bluetooth_Devices(self):
         print("Test to search BT Devices")
