@@ -21,28 +21,34 @@ class TestWiFi(object):
         self.d = Device()
         self.ap_name='dlink-549'
         self.ap_password='38017549'
+        self.d.press.home()
     def teardown(self):
         """This method is run once after _each_ test method is executed"""
+        self.d.press.home()
     def test_TurnOffWiFi(self):
         print("Test to turn off Wifi")
         # Turn off Wifi 
-        self.d.server.adb.cmd("shell svc wifi disable").communicate()
-        sleep(1)
-        self.d.server.adb.cmd("shell am start -n com.android.settings/.Settings").communicate()
-        OnOff=self.d(className="android.widget.ListView", resourceId="android:id/list") \
-                .child_by_text("Wi‑Fi", className="android.widget.LinearLayout") \
-                .child(className="android.widget.Switch").text
-        assert_equal(OnOff,u"OFF")
+        self.d.server.adb.cmd("shell am start -a android.intent.action.MAIN -n com.android.settings/.wifi.WifiSettings").communicate()
+        self.d.wait.update()
+        if self.d(text="ON").exists:
+            self.d(text="ON").click()
+            sleep(3)
+        self.d.wait.update()
+
+        assert self.d(text="OFF").exists
+
+
     def test_TurnOnWiFi(self):
         print("Test to turn on Wifi")
         # Turn on Wifi 
-        self.d.server.adb.cmd("shell svc wifi enable").communicate()
-        sleep(1)
-        self.d.server.adb.cmd("shell am start -n com.android.settings/.Settings").communicate()
-        OnOff=self.d(className="android.widget.ListView", resourceId="android:id/list") \
-                .child_by_text("Wi‑Fi", className="android.widget.LinearLayout") \
-                .child(className="android.widget.Switch").text
-        assert_equal(OnOff,u"ON")
+        self.d.server.adb.cmd("shell am start -a android.intent.action.MAIN -n com.android.settings/.wifi.WifiSettings").communicate()
+        self.d.wait.update()
+        if self.d(text="OFF").exists:
+            self.d(text="OFF").click()
+            sleep(3)
+        self.d.wait.update()
+ 
+        assert self.d(text="ON").exists
 
 
     def test_connect2wifiap(self):
