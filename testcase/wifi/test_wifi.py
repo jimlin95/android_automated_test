@@ -48,7 +48,7 @@ class TestWiFi(object):
             sleep(3)
         self.d.wait.update()
  
-        assert self.d(text="ON").exists
+        assert self.d(textContains="ON").exists
 
 
     def test_connect2wifiap(self):
