@@ -1,0 +1,6 @@
+Usage: ./dump.py 
+
+It will dump the widown hierarchy and save to local file "dump.xml"
+
+And,you can go to http://codebeautify.org/xmlviewer to check hierarchy easily on the website.
+
