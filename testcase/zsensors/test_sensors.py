@@ -7,6 +7,10 @@ from nose.tools import assert_not_equal
 from nose.tools import assert_raises
 from nose.tools import raises
 
+import sys
+sys.path.append("../utility")
+
+import utility as u
 class TestSensor(object):
     # constructor
     def __init__(self):
@@ -29,7 +33,6 @@ class TestSensor(object):
         self.mag_ymax=50
         self.mag_zmin=-50
         self.mag_zmax=50
-
         self.d = Device()
     # destructor
     def __del__(self):
@@ -45,6 +48,7 @@ class TestSensor(object):
     def setUp(self):
         """This method is run once before _each_ test method is executed"""
         #Install Meter toolbox apk
+        u.setup(self.d)
         ret = self.d.server.adb.cmd("install -r ./Z-DeviceTest_1.7_47.apk").communicate()
         if not ret:
             print("Failure to install Z-DeviceTest")
@@ -62,7 +66,7 @@ class TestSensor(object):
             print("Failure to uninstall Z-DeviceTest apk")
         else:
             print("Sucessful to uninstall Z-DeviceTest apk")
-
+        u.teardown(self.d)
         self.d.press.home()
     def test_Accel(self):
         print("Test to Gradienter")
