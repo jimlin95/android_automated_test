@@ -6,6 +6,8 @@ from nose.tools import assert_equal
 from nose.tools import assert_not_equal
 from nose.tools import assert_raises
 from nose.tools import raises
+import ConfigParser
+import os
 
 class TestBluetooth(object):
     @classmethod
@@ -51,6 +53,17 @@ class TestBluetooth(object):
 
     def test_Search_Bluetooth_Devices(self):
         print("Test to search BT Devices")
+        #================================
+        # get params from unittest.ini
+        #================================
+        configParser = ConfigParser.RawConfigParser()
+        configFilePath = r'./unittest.ini'
+        if os.path.exists(configFilePath):
+            configParser.read(configFilePath)
+        else:
+            print("Configuration file 'unittest.ini not found")
+        self.timeout = int(configParser.get('bluetooth','timeout'))
+        #================================
         # Open the Settings app
         self.d.server.adb.cmd("shell am start -a android.intent.action.MAIN -n com.android.settings/.bluetooth.BluetoothSettings"). \
                 communicate()
@@ -64,7 +77,7 @@ class TestBluetooth(object):
             self.d(text="OFF").click()
             sleep(3)
         self.d.wait.update()
-        ret = self.d(text="Search for devices").wait.exists(timeout=15000)
+        ret = self.d(text="Search for devices").wait.exists(timeout=self.timeout)
         print("The string of search for devices is found ? = " + str(ret))
         avl = self.d(className="android.widget.ListView").child_by_text("Available devices").childCount
         # child 1 FARTMB611Y
