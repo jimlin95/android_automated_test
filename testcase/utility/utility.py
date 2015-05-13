@@ -15,6 +15,8 @@ def registerSysWatchers(d):
     d.watcher("WEIBO_SEARCH_FRIENDS").when(text="搜寻好友").when(text="Skip").click(text="Skip")
     d.watcher("WEIBO_UPDATE").when(text="Download").when(text="Cancel").click(text="Cancel")
     d.watcher("ZDEV_WARN").when(text="Ok").when(text="Ok").click(text="Ok")
+    d.watcher("NEXT").when(text="NEXT").when(text="NEXT").click(text="NEXT")
+    d.watcher("Accept").when(text="Accept").when(text="Accept").click(text="Accept")
 
 def checkSystemWatchers(d):
     if d.watcher("AUTO_FC_WHEN_ANR").triggered:
