@@ -6,6 +6,8 @@ from nose.tools import assert_equal
 from nose.tools import assert_not_equal
 from nose.tools import assert_raises
 from nose.tools import raises
+import ConfigParser
+import os
 
 class TestWiFi(object):
     @classmethod
@@ -53,6 +55,19 @@ class TestWiFi(object):
 
     def test_connect2wifiap(self):
         print("Test to connect to  Wifi AP")
+        #================================
+        # get params from unittest.ini
+        #================================
+        configParser = ConfigParser.RawConfigParser()
+        configFilePath = r'./unittest.ini'
+        if os.path.exists(configFilePath):
+            configParser.read(configFilePath)
+        else:
+            print("Configuration file 'unittest.ini not found")
+        self.ap_name = configParser.get('wifi','ap_name')
+        self.ap_password = configParser.get('wifi','ap_password')
+        self.timeout = int(configParser.get('wifi','timeout'))
+        #================================
         # Open the Settings app
         self.d.server.adb.cmd("shell am start -a android.intent.action.MAIN -n com.android.settings/.wifi.WifiSettings").communicate()
         sleep(2)
@@ -65,7 +80,7 @@ class TestWiFi(object):
             self.d(text=self.ap_name).click()
         self.d(resourceId='com.android.settings:id/password').set_text(self.ap_password)
         self.d(text=u'Connect').click()
-        assert self.d(text=u'Connected').wait.exists(timeout=15000)
+        assert self.d(text=u'Connected').wait.exists(timeout=self.timeout)
 
 if __name__ == '__main__':
     wifi=TestWiFi()
