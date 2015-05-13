@@ -95,7 +95,7 @@ class TestCamera(object):
             print('Picture Match! , threshold = ' + str(threshold)) + ' ,minVal = ' + str(minVal)
             assert True         
         else:
-            print("Unmatkch")
+            print("Unmatch")
             assert False, 'Picture UnMatch! , threshold = ' + str(threshold) + ' ,minVal = ' + str(minVal)
 
 if __name__ == '__main__':
