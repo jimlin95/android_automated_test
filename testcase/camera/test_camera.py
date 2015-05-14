@@ -6,14 +6,9 @@ from nose.tools import assert_equal
 from nose.tools import assert_not_equal
 from nose.tools import assert_raises
 from nose.tools import raises
-from os.path import join, exists
 import os
-import time
-import sys
-sys.path.append("../utility")
-import ConfigParser
-import utility as u
-from comparison import isMatch, getMatchedCenterOffset
+import utility.common as u
+from utility.comparison import isMatch
 
 class TestCamera(object):
     # constructor
@@ -52,17 +47,14 @@ class TestCamera(object):
         #================================
         # get params from unittest.ini
         #================================
-        configParser = ConfigParser.RawConfigParser()   
-        configFilePath = r'./unittest.ini'
-        configParser.read(configFilePath)
-        expect_filename = configParser.get('takepicture','expect_filename')
-        current_filename = configParser.get('takepicture','current_filename')
-        threshold = float(configParser.get('takepicture','threshold'))
-        sleep_time = float(configParser.get('takepicture','sleep'))
+        expect_filename = u.getparas('takepicture','expect_filename')
+        current_filename = u.getparas('takepicture','current_filename')
+        threshold = float(u.getparas('takepicture','threshold'))
+        sleep_time = float(u.getparas('takepicture','sleep'))
 
         #================================
         if os.path.exists(current_filename):
-                os.remove(current_filename)
+            os.remove(current_filename)
         expect_image_path = os.path.abspath(expect_filename)
         current_image_path = os.path.abspath(current_filename)
         beforeC = self.d.server.adb.cmd("shell ls /sdcard/DCIM/Camera").communicate()

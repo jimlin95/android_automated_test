@@ -1,7 +1,8 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-from uiautomator import Device as d
 from time import sleep
+import os
+from ConfigParser import RawConfigParser
 def backHome(d):
     d.press('back')
     sleep(1)
@@ -32,3 +33,12 @@ def setup(d):
 def teardown(d):
     checkSystemWatchers(d)
     backHome(d)
+
+def getparas(section,key):
+    configParser = RawConfigParser()
+    configFilePath = r'./unittest.ini'
+    if os.path.exists(configFilePath):
+        configParser.read(configFilePath)
+    else:
+        print("Configuration file 'unittest.ini not found")
+    return configParser.get(section,key)

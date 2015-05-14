@@ -6,8 +6,9 @@ from nose.tools import assert_equal
 from nose.tools import assert_not_equal
 from nose.tools import assert_raises
 from nose.tools import raises
-import ConfigParser
 import os
+import utility.common as u
+from utility.comparison import isMatch 
 
 class TestWiFi(object):
     @classmethod
@@ -21,11 +22,13 @@ class TestWiFi(object):
     def setUp(self):
         """This method is run once before _each_ test method is executed"""
         self.d = Device()
+        u.setup(self.d)
         self.ap_name='dlink-549'
         self.ap_password='38017549'
         self.d.press.home()
     def teardown(self):
         """This method is run once after _each_ test method is executed"""
+        u.teardown(self.d)
         self.d.press.home()
     def test_TurnOffWiFi(self):
         print("Test to turn off Wifi")
@@ -58,15 +61,9 @@ class TestWiFi(object):
         #================================
         # get params from unittest.ini
         #================================
-        configParser = ConfigParser.RawConfigParser()
-        configFilePath = r'./unittest.ini'
-        if os.path.exists(configFilePath):
-            configParser.read(configFilePath)
-        else:
-            print("Configuration file 'unittest.ini not found")
-        self.ap_name = configParser.get('wifi','ap_name')
-        self.ap_password = configParser.get('wifi','ap_password')
-        self.timeout = int(configParser.get('wifi','timeout'))
+        self.ap_name = u.getparas('wifi','ap_name')
+        self.ap_password = u.getparas('wifi','ap_password')
+        self.timeout = int(u.getparas('wifi','timeout'))
         #================================
         # Open the Settings app
         self.d.server.adb.cmd("shell am start -a android.intent.action.MAIN -n com.android.settings/.wifi.WifiSettings").communicate()

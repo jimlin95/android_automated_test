@@ -6,8 +6,7 @@ from nose.tools import assert_equal
 from nose.tools import assert_not_equal
 from nose.tools import assert_raises
 from nose.tools import raises
-import ConfigParser
-import os
+import utility.common as u
 
 class TestBluetooth(object):
     @classmethod
@@ -21,10 +20,12 @@ class TestBluetooth(object):
     def setUp(self):
         """This method is run once before _each_ test method is executed"""
         self.d = Device()
+        u.setup(self.d)
         self.d.press.home()
     def teardown(self):
         """This method is run once after _each_ test method is executed"""
 
+        u.teardown(self.d)
     def test_TurnOffBluetooth(self):
         print("Test to turn off bluetooth")
         # Turn off bluetooth 
@@ -56,13 +57,7 @@ class TestBluetooth(object):
         #================================
         # get params from unittest.ini
         #================================
-        configParser = ConfigParser.RawConfigParser()
-        configFilePath = r'./unittest.ini'
-        if os.path.exists(configFilePath):
-            configParser.read(configFilePath)
-        else:
-            print("Configuration file 'unittest.ini not found")
-        self.timeout = int(configParser.get('bluetooth','timeout'))
+        self.timeout = int(u.getparas('bluetooth','timeout'))
         #================================
         # Open the Settings app
         self.d.server.adb.cmd("shell am start -a android.intent.action.MAIN -n com.android.settings/.bluetooth.BluetoothSettings"). \
