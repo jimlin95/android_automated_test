@@ -6,7 +6,7 @@ from nose.tools import assert_equal
 from nose.tools import assert_not_equal
 from nose.tools import assert_raises
 from nose.tools import raises
-
+import utility.common as u
 class TestSensor(object):
     # constructor
     def __init__(self):
@@ -19,6 +19,19 @@ class TestSensor(object):
         self.g_xmax=-0.20
         self.g_ymin=-2.50
         self.g_ymax=-1.90
+        #================================
+        # get params from unittest.ini
+        #================================
+        self.g_xmin = float(u.getparas('gsensor','spec_xmin'))
+        self.g_xmax = float(u.getparas('gsensor','spec_xmax'))
+        self.g_ymin = float(u.getparas('gsensor','spec_ymin'))
+        self.g_ymax = float(u.getparas('gsensor','spec_ymax'))
+        
+        self.sound_min = float(u.getparas('sound','spec_min'))
+        self.sound_max = float(u.getparas('sound','spec_max'))
+        self.light_min = float(u.getparas('light','spec_min'))
+        self.light_max = float(u.getparas('light','spec_max'))
+        #================================
         self.d = Device()
     # destructor
     def __del__(self):
@@ -33,6 +46,7 @@ class TestSensor(object):
 
     def setUp(self):
         """This method is run once before _each_ test method is executed"""
+        u.setup(self.d)
         #Install Meter toolbox apk
         ret = self.d.server.adb.cmd("install -r ./Meter\ Toolbox_1.1.2_14.apk").communicate()
         if not ret:
@@ -44,6 +58,7 @@ class TestSensor(object):
         self.d.wait.update()
     def teardown(self):
         """This method is run once after _each_ test method is executed"""
+        u.teardown(self.d)
         #Uninstall Meter toolbox apk
         #get package name by "adb shell pm list packages | grep "meter"
         ret = self.d.server.adb.cmd("uninstall com.jkfantasy.meterbox").communicate()
