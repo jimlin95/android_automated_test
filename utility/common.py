@@ -42,3 +42,12 @@ def getparas(section,key):
     else:
         print("Configuration file 'unittest.ini not found")
     return configParser.get(section,key)
+
+def start_activity(d,activity):
+    d.server.adb.cmd("shell am start -n" + activity).communicate()
+
+def print_dict(mydic):
+    for key, value in mydic.iteritems() :
+        print key, value
+
+
