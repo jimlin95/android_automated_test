@@ -21,7 +21,7 @@ def setDisplayTimeout(d,timeout):
     for k, v in SLEEP_TIMEOUT.iteritems():
         if k == timeout:
             ftimeout = v
-            print(ftimeout)
+            print("set Display timeout to " + v)
             break
 
     d(text=u'Sleep').click()

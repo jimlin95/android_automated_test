@@ -7,7 +7,86 @@ from nose.tools import assert_not_equal
 from nose.tools import assert_raises
 from nose.tools import raises
 import os
-from utility.record import record
+from utility.record import record, record_init,record_start, record_stop, record_end
+import utility.common as u
+import audioop 
+import wave
+class TestAudio(object):
+    # constructor
+    def __init__(self):
+        
+        #Initial value (criterion )
+        self.fixture_serial_no = "f0e673e1"
+        self.DUT_serial_no = "70400121"
+        self.dbm_max_audio = 6000
+        self.dbm_min_audio = 4800
+        #================================
+        # get params from unittest.ini
+        #================================
+        self.fixture_serial_no = u.getparas('audio','fixture_serial_no')
+        self.DUT_serial_no = u.getparas('audio','DUT_serial_no')
+        self.dbm_max_audio = float(u.getparas('audio','dbm_max_audio'))
+        self.dbm_min_audio = float(u.getparas('audio','dbm_min_audio'))
+        #================================
+        # Initial Fixture as self.f
+        self.f = Device(self.fixture_serial_no)
+        # Initial DUT as self.d
+        self.d = Device(self.DUT_serial_no)
+    # destructor
+    def __del__(self):
+        pass
+    @classmethod
+    def setup_class(klass):
+        """This method is run once for each class before any tests are run"""
+
+    @classmethod
+    def teardown_class(klass):
+        """This method is run once for each class _after_ all tests are run"""
+
+    def setUp(self):
+        """This method is run once before _each_ test method is executed"""
+        u.setup(self.d)
+        u.setup(self.f)
+        # Install Signal Generator apk
+        ret = self.d.server.adb.cmd("install -r ./Signal\ Generator_1.21_6.apk").communicate()
+        if not ret:
+            print("Failure to install Signal Generator apk")
+        else:
+            print("Sucessful to install Signal Generator apk")
+        record_init(self.f)
+        self.d.press.home()
+    def teardown(self):
+        """This method is run once after _each_ test method is executed"""
+        u.teardown(self.d)
+        u.teardown(self.f)
+        #Uninstall Meter toolbox apk
+        #get package name by "adb shell pm list packages | grep "meter"
+        ret = self.f.server.adb.cmd("uninstall radonsoft.net.signalgen").communicate()
+        if not ret:
+            print("Failure to uninstall SignalGen apk")
+        else:
+            print("Sucessful to uninstall SignalGen apk")
+
+    def test_audioout(self):
+        print("Test Audio speak")
+        self.d.server.adb.cmd("shell am start -n radonsoft.net.signalgen/.SignalGen").communicate()
+        self.d.wait.update()
+        self.d(resourceId="radonsoft.net.signalgen:id/Button03").click()
+        record_start(self.f)
+        record_stop(self.f)
+        self.d(resourceId="radonsoft.net.signalgen:id/Button03").click()
+        record_end(self.f)
+        audiofp = wave.open("record.wav",'r')
+        params = audiofp.getparams()
+        info = ['nchannels','sampwidth','framerate','nframes','comptype','compname']
+        for i in range(6):
+            print( str(info[i]) + " = " + str(params[i])) 
+        framebuffer = audiofp.readframes(audiofp.getnframes())
+        rms = audioop.rms(framebuffer,2)
+        print("rms = " + str(rms))
+
+        assert (float(rms) >= self.dbm_min_audio) and (float(rms) <= self.dbm_max_audio)
+
 if __name__ == '__main__':
     d = Device()
     record(d)
