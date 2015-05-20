@@ -20,8 +20,11 @@ class TestWiFi(object):
         """This method is run once for each class _after_ all tests are run"""
 
     def setUp(self):
-        """This method is run once before _each_ test method is executed"""
-        self.d = Device()
+        """This method is run once before _each_ test method is executed""" 
+
+        self.DUT_serial_no = "70400121"
+        self.DUT_serial_no = u.getparas('common','DUT_serial_no')
+        self.d = Device(self.DUT_serial_no)
         u.setup(self.d)
         self.ap_name='dlink-549'
         self.ap_password='38017549'

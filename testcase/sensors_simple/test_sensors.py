@@ -30,9 +30,11 @@ class TestSensor(object):
         self.mag_ymax=50
         self.mag_zmin=-50
         self.mag_zmax=50
+        self.DUT_serial_no = "70400121"
         #================================
         # get params from unittest.ini
         #================================
+        self.DUT_serial_no = u.getparas('common','DUT_serial_no')
         self.g_xmin = float(u.getparas('gsensor','spec_xmin'))
         self.g_xmax = float(u.getparas('gsensor','spec_xmax'))
         self.g_ymin = float(u.getparas('gsensor','spec_ymin'))
@@ -56,7 +58,7 @@ class TestSensor(object):
         self.mag_zmax = float(u.getparas('mag','spec_zmax'))
         #================================
  
-        self.d = Device()
+        self.d = Device(self.DUT_serial_no)
     # destructor
     def __del__(self):
         pass

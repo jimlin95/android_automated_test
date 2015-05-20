@@ -7,6 +7,7 @@ from nose.tools import assert_not_equal
 from nose.tools import assert_raises
 from nose.tools import raises
 import utility.common as u
+from  utility.setdisplaytimeout import setDisplayTimeout
 class Testlcd(object):
     # constructor
     def __init__(self):
@@ -32,14 +33,13 @@ class Testlcd(object):
         self.f = Device(self.fixture_serial_no)
         # Initial DUT as self.d
         self.d = Device(self.DUT_serial_no)
-        #TODO , set Display timeout to maximum (30 minutes) on DUT before testing.
     # destructor
     def __del__(self):
         pass
     @classmethod
     def setup_class(klass):
         """This method is run once for each class before any tests are run"""
-
+        print("setup class")
     @classmethod
     def teardown_class(klass):
         """This method is run once for each class _after_ all tests are run"""
@@ -62,8 +62,6 @@ class Testlcd(object):
             print("Sucessful to install Display Tester apk")
         self.f.press.home()
         self.d.press.home()
-        self.d.server.adb.cmd("shell am start -n com.sain.device.displaytest/.Main").communicate()
-        self.d.wait.update()
     def teardown(self):
         """This method is run once after _each_ test method is executed"""
         u.teardown(self.d)
@@ -83,6 +81,8 @@ class Testlcd(object):
 
     def test_lcd_off(self):
         print("Test LCD OFF")
+        self.d.server.adb.cmd("shell am start -n com.sain.device.displaytest/.Main").communicate()
+        self.d.wait.update()
         #show Black screen
         self.d(className="android.widget.Button",resourceId="com.sain.device.displaytest:id/lcdblack").click()
         self.d.screen.off() 
@@ -106,7 +106,12 @@ class Testlcd(object):
         assert (float(avg) >= self.lux_min_lcd_off) and (float(avg) <= self.lux_max_lcd_off)
     def test_lcd_on(self):
         print("Test LCD ON")
-        #show White screen
+        # Set Display timeout to maximum (30 minutes) on DUT before testing.
+        setDisplayTimeout(self.d,"30min")
+
+        self.d.server.adb.cmd("shell am start -n com.sain.device.displaytest/.Main").communicate()
+        self.d.wait.update()
+                #show White screen
         self.d(className="android.widget.Button",resourceId="com.sain.device.displaytest:id/lcdwhite").click()
         self.d.screen.on() 
         # Change to light meter tab

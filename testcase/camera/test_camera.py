@@ -14,7 +14,9 @@ class TestCamera(object):
     # constructor
     def __init__(self):
         #criterion , TODO: need to redefine them.
-        self.d = Device()
+        self.DUT_serial_no = "70400121"
+        self.DUT_serial_no = u.getparas('common','DUT_serial_no')
+        self.d = Device(self.DUT_serial_no)
     # destructor
     def __del__(self):
         pass

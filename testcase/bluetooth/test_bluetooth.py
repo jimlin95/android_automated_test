@@ -19,7 +19,9 @@ class TestBluetooth(object):
 
     def setUp(self):
         """This method is run once before _each_ test method is executed"""
-        self.d = Device()
+        self.DUT_serial_no = "70400121"
+        self.DUT_serial_no = u.getparas('common','DUT_serial_no')
+        self.d = Device(self.DUT_serial_no)
         u.setup(self.d)
         self.d.press.home()
     def teardown(self):
