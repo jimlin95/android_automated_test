@@ -12,9 +12,9 @@ import utility.common as u
 import audioop 
 import wave
 class TestAudio(object):
-    # constructor
-    def __init__(self):
-        
+    @classmethod
+    def setup_class(self):
+        """This method is run once for each class before any tests are run"""
         #Initial value (criterion )
         self.fixture_serial_no = "f0e673e1"
         self.DUT_serial_no = "70400121"
@@ -32,21 +32,6 @@ class TestAudio(object):
         self.f = Device(self.fixture_serial_no)
         # Initial DUT as self.d
         self.d = Device(self.DUT_serial_no)
-    # destructor
-    def __del__(self):
-        pass
-    @classmethod
-    def setup_class(klass):
-        """This method is run once for each class before any tests are run"""
-
-    @classmethod
-    def teardown_class(klass):
-        """This method is run once for each class _after_ all tests are run"""
-
-    def setUp(self):
-        """This method is run once before _each_ test method is executed"""
-        u.setup(self.d)
-        u.setup(self.f)
         # Install Signal Generator apk
         ret = self.d.server.adb.cmd("install -r ./Signal\ Generator_1.21_6.apk").communicate()
         if not ret:
@@ -54,11 +39,9 @@ class TestAudio(object):
         else:
             print("Sucessful to install Signal Generator apk")
         record_init(self.f)
-        self.d.press.home()
-    def teardown(self):
-        """This method is run once after _each_ test method is executed"""
-        u.teardown(self.d)
-        u.teardown(self.f)
+    @classmethod
+    def teardown_class(self):
+        """This method is run once for each class _after_ all tests are run"""
         #Uninstall Meter toolbox apk
         #get package name by "adb shell pm list packages | grep "meter"
         ret = self.f.server.adb.cmd("uninstall radonsoft.net.signalgen").communicate()
@@ -67,6 +50,15 @@ class TestAudio(object):
         else:
             print("Sucessful to uninstall SignalGen apk")
 
+
+    def setUp(self):
+        """This method is run once before _each_ test method is executed"""
+        u.setup(self.d)
+        u.setup(self.f)
+    def teardown(self):
+        """This method is run once after _each_ test method is executed"""
+        u.teardown(self.d)
+        u.teardown(self.f)
     def test_audioout(self):
         print("Test Audio speak")
         self.d.server.adb.cmd("shell am start -n radonsoft.net.signalgen/.SignalGen").communicate()

@@ -10,23 +10,20 @@ import utility.common as u
 
 class TestBluetooth(object):
     @classmethod
-    def setup_class(klass):
+    def setup_class(self):
         """This method is run once for each class before any tests are run"""
-
+        self.DUT_serial_no = "70400121"
+        self.DUT_serial_no = u.getparas('common','DUT_serial_no')
+        self.d = Device(self.DUT_serial_no)
     @classmethod
-    def teardown_class(klass):
+    def teardown_class(self):
         """This method is run once for each class _after_ all tests are run"""
 
     def setUp(self):
         """This method is run once before _each_ test method is executed"""
-        self.DUT_serial_no = "70400121"
-        self.DUT_serial_no = u.getparas('common','DUT_serial_no')
-        self.d = Device(self.DUT_serial_no)
         u.setup(self.d)
-        self.d.press.home()
     def teardown(self):
         """This method is run once after _each_ test method is executed"""
-
         u.teardown(self.d)
     def test_TurnOffBluetooth(self):
         print("Test to turn off bluetooth")

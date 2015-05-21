@@ -8,8 +8,9 @@ from nose.tools import assert_raises
 from nose.tools import raises
 import utility.common as u
 class TestSensor(object):
-    # constructor
-    def __init__(self):
+    @classmethod
+    def setup_class(self):
+        """This method is run once for each class before any tests are run"""
         #criterion
         self.sound_min=60.0
         self.sound_max=73.0
@@ -35,20 +36,6 @@ class TestSensor(object):
         self.light_max = float(u.getparas('light','spec_max'))
         #================================
         self.d = Device(self.DUT_serial_no)
-    # destructor
-    def __del__(self):
-        pass
-    @classmethod
-    def setup_class(klass):
-        """This method is run once for each class before any tests are run"""
-
-    @classmethod
-    def teardown_class(klass):
-        """This method is run once for each class _after_ all tests are run"""
-
-    def setUp(self):
-        """This method is run once before _each_ test method is executed"""
-        u.setup(self.d)
         #Install Meter toolbox apk
         ret = self.d.server.adb.cmd("install -r ./Meter\ Toolbox_1.1.2_14.apk").communicate()
         if not ret:
@@ -56,11 +43,9 @@ class TestSensor(object):
         else:
             print("install Meter toolbox apk sucessfuly")
         self.d.press.home()
-        self.d.server.adb.cmd("shell am start -n com.jkfantasy.meterbox/.MainActivity").communicate()
-        self.d.wait.update()
-    def teardown(self):
-        """This method is run once after _each_ test method is executed"""
-        u.teardown(self.d)
+    @classmethod
+    def teardown_class(self):
+        """This method is run once for each class _after_ all tests are run"""
         #Uninstall Meter toolbox apk
         #get package name by "adb shell pm list packages | grep "meter"
         ret = self.d.server.adb.cmd("uninstall com.jkfantasy.meterbox").communicate()
@@ -68,8 +53,15 @@ class TestSensor(object):
             print("Failure to uninstall Meter Toolbox apk")
         else:
             print("Sucessful to uninstall Meter Toolbox apk")
+    def setUp(self):
+        """This method is run once before _each_ test method is executed"""
+        u.setup(self.d)
+        self.d.server.adb.cmd("shell am start -n com.jkfantasy.meterbox/.MainActivity").communicate()
+        self.d.wait.update()
+    def teardown(self):
+        """This method is run once after _each_ test method is executed"""
+        u.teardown(self.d)
 
-        self.d.press.home()
     def test_SoundMeter(self):
         print("Test to Sound Meter")
         self.d(resourceId="com.jkfantasy.meterbox:id/btn_tab0").click()

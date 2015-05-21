@@ -78,6 +78,7 @@ def record_init(self):
     self.press.back()
 def record_start(self):
 
+    ret = self.server.adb.cmd("shell am start -n com.andrwq.recorder/.RecorderActivity").communicate()
     self(text="Start recording   ").click()
 
 def record_stop(self):

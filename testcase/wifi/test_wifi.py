@@ -12,16 +12,8 @@ from utility.comparison import isMatch
 
 class TestWiFi(object):
     @classmethod
-    def setup_class(klass):
+    def setup_class(self):
         """This method is run once for each class before any tests are run"""
-
-    @classmethod
-    def teardown_class(klass):
-        """This method is run once for each class _after_ all tests are run"""
-
-    def setUp(self):
-        """This method is run once before _each_ test method is executed""" 
-
         self.DUT_serial_no = "70400121"
         self.DUT_serial_no = u.getparas('common','DUT_serial_no')
         self.d = Device(self.DUT_serial_no)
@@ -29,6 +21,15 @@ class TestWiFi(object):
         self.ap_name='dlink-549'
         self.ap_password='38017549'
         self.d.press.home()
+
+    @classmethod
+    def teardown_class(self):
+        """This method is run once for each class _after_ all tests are run"""
+
+    def setUp(self):
+        """This method is run once before _each_ test method is executed""" 
+        u.setup(self.d)
+
     def teardown(self):
         """This method is run once after _each_ test method is executed"""
         u.teardown(self.d)

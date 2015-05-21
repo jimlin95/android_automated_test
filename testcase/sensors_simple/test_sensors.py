@@ -9,8 +9,9 @@ from nose.tools import raises
 import utility.common as u
 
 class TestSensor(object):
-    # constructor
-    def __init__(self):
+    @classmethod
+    def setup_class(self):
+        """This method is run once for each class before any tests are run"""
         #criterion , TODO: need to redefine them.
         self.g_xmin=-0.0800
         self.g_xmax=-0.0300
@@ -59,30 +60,15 @@ class TestSensor(object):
         #================================
  
         self.d = Device(self.DUT_serial_no)
-    # destructor
-    def __del__(self):
-        pass
-    @classmethod
-    def setup_class(klass):
-        """This method is run once for each class before any tests are run"""
-
-    @classmethod
-    def teardown_class(klass):
-        """This method is run once for each class _after_ all tests are run"""
-
-    def setUp(self):
-        """This method is run once before _each_ test method is executed"""
         #Install Meter toolbox apk
         ret = self.d.server.adb.cmd("install -r ./SensorSimple_1.0_1.apk").communicate()
         if not ret:
             print("Failure to install Sensor Simpleapk")
         else:
             print("Install Sensor Simple apk sucessfuly")
-        self.d.press.home()
-        self.d.server.adb.cmd("shell am start -n  com.invensense.app.sensorsimple/.SensorSimpleActivity").communicate()
-        self.d.wait.update()
-    def teardown(self):
-        """This method is run once after _each_ test method is executed"""
+    @classmethod
+    def teardown_class(self):
+        """This method is run once for each class _after_ all tests are run"""
         #Uninstall Meter toolbox apk
         #get package name by "adb shell pm list packages | grep "meter"
         ret = self.d.server.adb.cmd("uninstall com.invensense.app.sensorsimple").communicate()
@@ -91,7 +77,16 @@ class TestSensor(object):
         else:
             print("Sucessful to uninstall Sensor Simple apk")
 
-        self.d.press.home()
+    def setUp(self):
+        """This method is run once before _each_ test method is executed"""
+        u.setup(self.d)
+        self.d.server.adb.cmd("shell am start -n  com.invensense.app.sensorsimple/.SensorSimpleActivity").communicate()
+        self.d.wait.update()
+
+    def teardown(self):
+        """This method is run once after _each_ test method is executed"""
+        u.teardown(self.d)
+
     def test_Accel(self):
         print("Test to Gradienter")
         # Change to Gradienter tab

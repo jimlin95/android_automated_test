@@ -8,8 +8,9 @@ from nose.tools import assert_raises
 from nose.tools import raises
 import utility.common as u
 class TestSensor(object):
-    # constructor
-    def __init__(self):
+    @classmethod
+    def setup_class(self):
+        """This method is run once for each class before any tests are run"""
         #criterion , TODO: need to redefine them.
         self.g_xmin=-0.0800
         self.g_xmax=-0.0300
@@ -62,31 +63,14 @@ class TestSensor(object):
         self.light_max = float(u.getparas('light','spec_max'))
         #================================
         self.d = Device(self.DUT_serial_no)
-    # destructor
-    def __del__(self):
-        pass
-    @classmethod
-    def setup_class(klass):
-        """This method is run once for each class before any tests are run"""
-
-    @classmethod
-    def teardown_class(klass):
-        """This method is run once for each class _after_ all tests are run"""
-
-    def setUp(self):
-        """This method is run once before _each_ test method is executed"""
-        #Install Z-Devicetest apk
-        u.setup(self.d)
         ret = self.d.server.adb.cmd("install -r ./Z-DeviceTest_1.7_47.apk").communicate()
         if not ret:
             print("Failure to install Z-DeviceTest")
         else:
             print("Sucessful to install Z-DeviceTest")
-        self.d.press.home()
-        self.d.server.adb.cmd("shell am start -n zausan.zdevicetest/.zdevicetest").communicate()
-        self.d.wait.update()
-    def teardown(self):
-        """This method is run once after _each_ test method is executed"""
+    @classmethod
+    def teardown_class(self):
+        """This method is run once for each class _after_ all tests are run"""
         #Uninstall Z-Devicetest apk
         #get package name by "adb shell pm list packages | grep "zdevice"
         ret = self.d.server.adb.cmd("uninstall zausan.zdevicetest").communicate()
@@ -94,8 +78,15 @@ class TestSensor(object):
             print("Failure to uninstall Z-DeviceTest apk")
         else:
             print("Sucessful to uninstall Z-DeviceTest apk")
+    def setUp(self):
+        """This method is run once before _each_ test method is executed"""
+        #Install Z-Devicetest apk
+        u.setup(self.d)
+        self.d.server.adb.cmd("shell am start -n zausan.zdevicetest/.zdevicetest").communicate()
+        self.d.wait.update()
+    def teardown(self):
+        """This method is run once after _each_ test method is executed"""
         u.teardown(self.d)
-        self.d.press.home()
     def test_Accel(self):
         print("Test to Gradienter")
         self.d(resourceId="zausan.zdevicetest:id/boton_acelerometros").click()

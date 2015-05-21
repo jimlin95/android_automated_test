@@ -11,28 +11,22 @@ import utility.common as u
 from utility.comparison import isMatch
 
 class TestCamera(object):
-    # constructor
-    def __init__(self):
+    @classmethod
+    def setup_class(self):
+        """This method is run once for each class before any tests are run"""
         #criterion , TODO: need to redefine them.
         self.DUT_serial_no = "70400121"
         self.DUT_serial_no = u.getparas('common','DUT_serial_no')
         self.d = Device(self.DUT_serial_no)
-    # destructor
-    def __del__(self):
-        pass
+        self.d.server.adb.cmd("shell rm /sdcard/DCIM/Camera/*").communicate()
+        self.d.server.adb.cmd("shell refresh /sdcard/DCIM/Camera").communicate()
     @classmethod
-    def setup_class(klass):
-        """This method is run once for each class before any tests are run"""
-
-    @classmethod
-    def teardown_class(klass):
+    def teardown_class(self):
         """This method is run once for each class _after_ all tests are run"""
 
     def setUp(self):
         """This method is run once before _each_ test method is executed"""
         u.setup(self.d)
-        self.d.server.adb.cmd("shell rm /sdcard/DCIM/Camera/*").communicate()
-        self.d.server.adb.cmd("shell refresh /sdcard/DCIM/Camera").communicate()
         self.d.server.adb.cmd("shell am start -n com.google.android.GoogleCamera/com.android.camera.CameraActivity").communicate()
         self.d.wait.update()
     def teardown(self):

@@ -9,9 +9,9 @@ from nose.tools import raises
 import utility.common as u
 from  utility.setdisplaytimeout import setDisplayTimeout
 class Testlcd(object):
-    # constructor
-    def __init__(self):
-        
+    @classmethod
+    def setup_class(self):
+        """This method is run once for each class before any tests are run"""
         #Initial value (criterion )
         self.fixture_serial_no = "f0e673e1"
         self.DUT_serial_no = "70400121"
@@ -33,21 +33,6 @@ class Testlcd(object):
         self.f = Device(self.fixture_serial_no)
         # Initial DUT as self.d
         self.d = Device(self.DUT_serial_no)
-    # destructor
-    def __del__(self):
-        pass
-    @classmethod
-    def setup_class(klass):
-        """This method is run once for each class before any tests are run"""
-        print("setup class")
-    @classmethod
-    def teardown_class(klass):
-        """This method is run once for each class _after_ all tests are run"""
-
-    def setUp(self):
-        """This method is run once before _each_ test method is executed"""
-        u.setup(self.d)
-        u.setup(self.f)
         #Install Meter toolbox apk
         ret = self.f.server.adb.cmd("install -r ./Meter\ Toolbox_1.1.2_14.apk").communicate()
         if not ret:
@@ -60,12 +45,9 @@ class Testlcd(object):
             print("Failure to install Display Tester apk")
         else:
             print("Sucessful to install Display Tester apk")
-        self.f.press.home()
-        self.d.press.home()
-    def teardown(self):
-        """This method is run once after _each_ test method is executed"""
-        u.teardown(self.d)
-        u.teardown(self.f)
+    @classmethod
+    def teardown_class(self):
+        """This method is run once for each class _after_ all tests are run"""
         #Uninstall Meter toolbox apk
         #get package name by "adb shell pm list packages | grep "meter"
         ret = self.f.server.adb.cmd("uninstall com.jkfantasy.meterbox").communicate()
@@ -79,6 +61,15 @@ class Testlcd(object):
         else:
             print("Sucessful to uninstall Display Tester  apk")
 
+
+    def setUp(self):
+        """This method is run once before _each_ test method is executed"""
+        u.setup(self.d)
+        u.setup(self.f)
+    def teardown(self):
+        """This method is run once after _each_ test method is executed"""
+        u.teardown(self.d)
+        u.teardown(self.f)
     def test_lcd_off(self):
         print("Test LCD OFF")
         self.d.server.adb.cmd("shell am start -n com.sain.device.displaytest/.Main").communicate()
@@ -111,7 +102,7 @@ class Testlcd(object):
 
         self.d.server.adb.cmd("shell am start -n com.sain.device.displaytest/.Main").communicate()
         self.d.wait.update()
-                #show White screen
+        #show White screen
         self.d(className="android.widget.Button",resourceId="com.sain.device.displaytest:id/lcdwhite").click()
         self.d.screen.on() 
         # Change to light meter tab
