@@ -1,8 +1,8 @@
 #!/bin/bash 
 testresult=/src/test_result 
 time_stamp=$(date +%Y_%m_%d_%H_%M_%S)
-mkdir ${testresult}/${time_stamp}
-if [ $1 != "" ]; then
+mkdir -p ${testresult}/${time_stamp}
+if [ "$1" != "" ]; then
     nu=$1
 else
     nu=1

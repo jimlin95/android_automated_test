@@ -2,4 +2,4 @@
 # setting PYTHONPATH also works
 export PYTHONPATH=$PYTHONPATH:$PWD
 
-export PATH=$PWD:$PATH
+export PATH=$PWD:$PWD/scripts/:$PATH
