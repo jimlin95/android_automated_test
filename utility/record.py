@@ -52,9 +52,6 @@ def record(self):
     self.server.adb.cmd("shell refresh /sdcard/SmartVoiceRecorder").communicate()
 
 def record_init(self):
-    self.current_filename = "record.wav"
-    if os.path.exists(self.current_filename):
-        os.remove(self.current_filename)
     # Get pythonpath
     try:
            user_paths = os.environ['PYTHONPATH'].split(os.pathsep)
@@ -87,13 +84,15 @@ def record_stop(self):
     self(resourceId="android:id/button1").click()
 
 def record_end(self):
+    if os.path.exists(self.wav_filename):
+        os.remove(self.wav_filename)
     sleep(2)
     afterR = self.server.adb.cmd("shell ls /sdcard/SmartVoiceRecorder").communicate()
     filename=''.join(afterR)
     filename=filename.split('\r\n')[0]
     #print(filename)
-    # adb pull picture and rename to $current_filename
-    self.server.adb.cmd("pull /sdcard/SmartVoiceRecorder/"+ filename +" ./"+ self.current_filename ).communicate()
+    # adb pull picture and rename to self.wav_filename
+    self.server.adb.cmd("pull /sdcard/SmartVoiceRecorder/"+ filename +" ./"+ self.wav_filename ).communicate()
 
     ret = self.server.adb.cmd("uninstall com.andrwq.recorder").communicate()
     if not ret:

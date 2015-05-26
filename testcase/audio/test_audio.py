@@ -11,6 +11,13 @@ from utility.record import record, record_init,record_start, record_stop, record
 import utility.common as u
 import audioop 
 import wave
+from utility.frequency_analysis import plotAmplitudeSpectru
+
+from pylab import plot, show, title, xlabel, ylabel, subplot, savefig
+from scipy import fft, arange, ifft
+from numpy import sin, linspace, pi
+from scipy.io.wavfile import read,write
+
 class TestAudio(object):
     @classmethod
     def setup_class(self):
@@ -20,6 +27,9 @@ class TestAudio(object):
         self.DUT_serial_no = "70400121"
         self.dbm_max_audio = 6000
         self.dbm_min_audio = 4800
+        record_filename = 'record' # record.wav , record.png
+        self.wav_filename = record_filename + '.wav'
+        self.png_filename = record_filename + '.png'
         #================================
         # get params from unittest.ini
         #================================
@@ -27,9 +37,12 @@ class TestAudio(object):
         self.DUT_serial_no = u.getparas('audio','DUT_serial_no')
         self.dbm_max_audio = float(u.getparas('audio','dbm_max_audio'))
         self.dbm_min_audio = float(u.getparas('audio','dbm_min_audio'))
+        self.wav_filename = u.getparas('audio','wavfile')
+        self.png_filename = u.getparas('audio','pngfile')
         #================================
         # Initial Fixture as self.f
         self.f = Device(self.fixture_serial_no)
+        self.f.wav_filename = self.wav_filename
         # Initial DUT as self.d
         self.d = Device(self.DUT_serial_no)
         # Install Signal Generator apk
@@ -63,12 +76,14 @@ class TestAudio(object):
         print("Test Audio speak")
         self.d.server.adb.cmd("shell am start -n radonsoft.net.signalgen/.SignalGen").communicate()
         self.d.wait.update()
+        # generate sine wave
         self.d(resourceId="radonsoft.net.signalgen:id/Button03").click()
         record_start(self.f)
         record_stop(self.f)
+        # stop to generate sine wave
         self.d(resourceId="radonsoft.net.signalgen:id/Button03").click()
         record_end(self.f)
-        audiofp = wave.open("record.wav",'r')
+        audiofp = wave.open(self.wav_filename,'r')
         params = audiofp.getparams()
         info = ['nchannels','sampwidth','framerate','nframes','comptype','compname']
         for i in range(6):
@@ -78,7 +93,7 @@ class TestAudio(object):
         print("rms = " + str(rms))
 
         assert (float(rms) >= self.dbm_min_audio) and (float(rms) <= self.dbm_max_audio)
-
+        plotAmplitudeSpectru(self.wav_filename,self.png_filename)
 if __name__ == '__main__':
     d = Device()
     record(d)
