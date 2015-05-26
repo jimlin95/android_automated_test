@@ -13,10 +13,6 @@ import audioop
 import wave
 from utility.frequency_analysis import plotAmplitudeSpectru
 
-from pylab import plot, show, title, xlabel, ylabel, subplot, savefig
-from scipy import fft, arange, ifft
-from numpy import sin, linspace, pi
-from scipy.io.wavfile import read,write
 
 class TestAudio(object):
     @classmethod

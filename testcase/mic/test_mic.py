@@ -13,10 +13,6 @@ import audioop
 import wave
 from utility.frequency_analysis import plotAmplitudeSpectru
 
-from pylab import plot, show, title, xlabel, ylabel, subplot, savefig
-from scipy import fft, arange, ifft
-from numpy import sin, linspace, pi
-from scipy.io.wavfile import read,write
 
 class TestMic(object):
     @classmethod
@@ -73,7 +69,7 @@ class TestMic(object):
         u.teardown(self.d)
         u.teardown(self.f)
     def test_mic(self):
-        print("Test Audio speak")
+        print("Test MIC")
         self.f.server.adb.cmd("shell am start -n radonsoft.net.signalgen/.SignalGen").communicate()
         self.f.wait.update()
         # generate sine wave
