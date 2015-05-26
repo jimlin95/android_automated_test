@@ -18,40 +18,40 @@ from scipy import fft, arange, ifft
 from numpy import sin, linspace, pi
 from scipy.io.wavfile import read,write
 
-class TestAudio(object):
+class TestMic(object):
     @classmethod
     def setup_class(self):
         """This method is run once for each class before any tests are run"""
         #Initial value (criterion )
         self.fixture_serial_no = "f0e673e1"
         self.DUT_serial_no = "70400121"
-        self.dbm_max_audio = 6000
-        self.dbm_min_audio = 4800
+        self.dbm_max_mic= 6000
+        self.dbm_min_mic= 4800
         record_filename = 'record' # record.wav , record.png
         self.wav_filename = record_filename + '.wav'
         self.png_filename = record_filename + '.png'
         #================================
         # get params from unittest.ini
         #================================
-        self.fixture_serial_no = u.getparas('audio','fixture_serial_no')
-        self.DUT_serial_no = u.getparas('audio','DUT_serial_no')
-        self.dbm_max_audio = float(u.getparas('audio','dbm_max_audio'))
-        self.dbm_min_audio = float(u.getparas('audio','dbm_min_audio'))
-        self.wav_filename = u.getparas('audio','wavfile')
-        self.png_filename = u.getparas('audio','pngfile')
+        self.fixture_serial_no = u.getparas('mic','fixture_serial_no')
+        self.DUT_serial_no = u.getparas('mic','DUT_serial_no')
+        self.dbm_max_mic = float(u.getparas('mic','dbm_max_mic'))
+        self.dbm_min_mic = float(u.getparas('mic','dbm_min_mic'))
+        self.wav_filename = u.getparas('mic','wavfile')
+        self.png_filename = u.getparas('mic','pngfile')
         #================================
         # Initial Fixture as self.f
         self.f = Device(self.fixture_serial_no)
-        self.f.wav_filename = self.wav_filename
-        # Initial DUT as self.d
-        self.d = Device(self.DUT_serial_no)
         # Install Signal Generator apk
-        ret = self.d.server.adb.cmd("install -r ./Signal\ Generator_1.21_6.apk").communicate()
+        ret = self.f.server.adb.cmd("install -r ./Signal\ Generator_1.21_6.apk").communicate()
         if not ret:
             print("Failure to install Signal Generator apk")
         else:
             print("Sucessful to install Signal Generator apk")
-        record_init(self.f)
+        # Initial DUT as self.d
+        self.d = Device(self.DUT_serial_no)
+        self.d.wav_filename = self.wav_filename
+        record_init(self.d)
     @classmethod
     def teardown_class(self):
         """This method is run once for each class _after_ all tests are run"""
@@ -72,17 +72,17 @@ class TestAudio(object):
         """This method is run once after _each_ test method is executed"""
         u.teardown(self.d)
         u.teardown(self.f)
-    def test_audioout(self):
+    def test_mic(self):
         print("Test Audio speak")
-        self.d.server.adb.cmd("shell am start -n radonsoft.net.signalgen/.SignalGen").communicate()
-        self.d.wait.update()
+        self.f.server.adb.cmd("shell am start -n radonsoft.net.signalgen/.SignalGen").communicate()
+        self.f.wait.update()
         # generate sine wave
-        self.d(resourceId="radonsoft.net.signalgen:id/Button03").click()
-        record_start(self.f)
-        record_stop(self.f)
+        self.f(resourceId="radonsoft.net.signalgen:id/Button03").click()
+        record_start(self.d)
+        record_stop(self.d)
         # stop to generate sine wave
-        self.d(resourceId="radonsoft.net.signalgen:id/Button03").click()
-        record_end(self.f)
+        self.f(resourceId="radonsoft.net.signalgen:id/Button03").click()
+        record_end(self.d)
         audiofp = wave.open(self.wav_filename,'r')
         params = audiofp.getparams()
         info = ['nchannels','sampwidth','framerate','nframes','comptype','compname']
@@ -93,8 +93,6 @@ class TestAudio(object):
         print("rms = " + str(rms))
 
         plotAmplitudeSpectru(self.wav_filename,self.png_filename)
-        assert (float(rms) >= self.dbm_min_audio) and (float(rms) <= self.dbm_max_audio)
+        assert (float(rms) >= self.dbm_min_mic) and (float(rms) <= self.dbm_max_mic)
 if __name__ == '__main__':
-    d = Device()
-    record(d)
-
+    pass
