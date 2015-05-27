@@ -1,8 +1,9 @@
+import matplotlib as mpl
+mpl.use('Agg')
 from pylab import plot, show, title, xlabel, ylabel, subplot, savefig , log
 from scipy import fft, arange, ifft
 from numpy import sin, linspace, pi
 from scipy.io.wavfile import read,write
-
 def plotSpectru(data,Fs):
     n = len(data) # lungime semnal
     k = arange(n)
