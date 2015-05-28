@@ -90,7 +90,7 @@ class TestWiFi(object):
         self.d.wait.update()
         wifi_mac = self.d(text="Wi‑Fi MAC address").down(className="android.widget.TextView").text
         print("wifi_mac = %s" % wifi_mac)
-        assert (wifi_mac == self.wifi_mac)
+        assert (wifi_mac.upper() == self.wifi_mac.upper())
 if __name__ == '__main__':
     wifi=TestWiFi()
     wifi.setup_class()

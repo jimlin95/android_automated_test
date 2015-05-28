@@ -13,7 +13,9 @@ class TestBluetooth(object):
     def setup_class(self):
         """This method is run once for each class before any tests are run"""
         self.DUT_serial_no = "70400121"
+        self.bluetooth_mac = "12:34:56:78:9A:BC"
         self.DUT_serial_no = u.getparas('common','DUT_serial_no')
+        self.bluetooth_mac= u.getparas('bluetooth','bluetooth_mac')
         self.d = Device(self.DUT_serial_no)
     @classmethod
     def teardown_class(self):
@@ -84,6 +86,14 @@ class TestBluetooth(object):
 
         print("Number of devices has been found = " + str(avl-2))
         assert avl > 2 and  found == False
+    def test_Check_Bluetooth_MAC_address(self):
+        print("Check Bluetooth Mac address")
+        self.d.server.adb.cmd("shell am start -n com.android.settings/.deviceinfo.Status").communicate()
+        self.d.wait.update()
+        bluetooth_mac = self.d(text="Bluetooth address").down(className="android.widget.TextView").text
+        print("bluetooth_mac = %s" % bluetooth_mac)
+        assert (bluetooth_mac.upper() == self.bluetooth_mac.upper())
+
 if __name__ == '__main__':
     bluetooth=TestBluetooth()
     bluetooth.setUp()
