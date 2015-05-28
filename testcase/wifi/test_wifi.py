@@ -15,7 +15,9 @@ class TestWiFi(object):
     def setup_class(self):
         """This method is run once for each class before any tests are run"""
         self.DUT_serial_no = "70400121"
+        self.wifi_mac = "12:34:56:78:9A:BC"
         self.DUT_serial_no = u.getparas('common','DUT_serial_no')
+        self.wifi_mac= u.getparas('wifi','wifi_mac')
         self.d = Device(self.DUT_serial_no)
         u.setup(self.d)
         self.ap_name='dlink-549'
@@ -60,7 +62,7 @@ class TestWiFi(object):
         assert self.d(textContains="ON").exists
 
 
-    def test_connect2wifiap(self):
+    def test_Connect2wifiap(self):
         print("Test to connect to  Wifi AP")
         #================================
         # get params from unittest.ini
@@ -82,10 +84,18 @@ class TestWiFi(object):
         self.d(resourceId='com.android.settings:id/password').set_text(self.ap_password)
         self.d(text=u'Connect').click()
         assert self.d(text=u'Connected').wait.exists(timeout=self.timeout)
-
+    def test_CheckWiFiMac(self):
+        print("Check Wifi Mac")
+        self.d.server.adb.cmd("shell am start -n com.android.settings/.deviceinfo.Status").communicate()
+        self.d.wait.update()
+        wifi_mac = self.d(text="Wi‑Fi MAC address").down(className="android.widget.TextView").text
+        print("wifi_mac = %s" % wifi_mac)
+        assert (wifi_mac == self.wifi_mac)
 if __name__ == '__main__':
     wifi=TestWiFi()
+    wifi.setup_class()
     wifi.setUp()
-    wifi.test_TurnOffWiFi()
-    wifi.test_TurnOnWiFi()
-    wifi.test_connect2wifiap()
+   # wifi.test_TurnOffWiFi()
+   # wifi.test_TurnOnWiFi()
+   # wifi.test_Connect2wifiap() 
+    wifi.test_CheckWiFiMac()
