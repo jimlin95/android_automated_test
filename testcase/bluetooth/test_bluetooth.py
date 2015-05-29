@@ -41,7 +41,7 @@ class TestBluetooth(object):
         assert self.d(text="OFF").exists
 
     def test_TurnOnBluetooth(self):
-        print("Test to turn off bluetooth")
+        print("Test to turn on bluetooth")
         # Turn off bluetooth 
         self.d.server.adb.cmd("shell am start -a android.intent.action.MAIN -n com.android.settings/.bluetooth.BluetoothSettings"). \
                 communicate()

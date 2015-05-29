@@ -9,7 +9,7 @@ from nose.tools import raises
 import os
 import utility.common as u
 from utility.comparison import isMatch 
-
+from nose.tools import nottest
 class TestWiFi(object):
     @classmethod
     def setup_class(self):
@@ -48,7 +48,6 @@ class TestWiFi(object):
 
         assert self.d(text="OFF").exists
 
-
     def test_TurnOnWiFi(self):
         print("Test to turn on Wifi")
         # Turn on Wifi 
@@ -60,7 +59,6 @@ class TestWiFi(object):
         self.d.wait.update()
  
         assert self.d(textContains="ON").exists
-
 
     def test_Connect2wifiap(self):
         print("Test to connect to  Wifi AP")
@@ -91,6 +89,9 @@ class TestWiFi(object):
         wifi_mac = self.d(text="Wi‑Fi MAC address").down(className="android.widget.TextView").text
         print("wifi_mac = %s" % wifi_mac)
         assert (wifi_mac.upper() == self.wifi_mac.upper())
+    @nottest
+    def test_nottest(self):
+        pass
 if __name__ == '__main__':
     wifi=TestWiFi()
     wifi.setup_class()

@@ -42,7 +42,9 @@ class TestStorage(object):
         self.d.server.adb.cmd("shell am start -a android.intent.action.MAIN -n com.android.settings/.Settings").communicate()
         self.d.wait.update()
         self.d(text="Storage").click()
-        storagesize = self.d(resourceId="android:id/summary").text
+        #storagesize = self.d(resourceId="android:id/summary").text
+        storagesize = self.d(text="Total space").down(resourceId="android:id/summary").text
+        print(storagesize)
         size=float(storagesize[:-2])
         unit = storagesize[-2:]
         print("Internal storage totalsize = %2.2f %s" %(size,unit))

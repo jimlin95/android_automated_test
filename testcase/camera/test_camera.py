@@ -27,7 +27,7 @@ class TestCamera(object):
     def setUp(self):
         """This method is run once before _each_ test method is executed"""
         u.setup(self.d)
-        self.d.server.adb.cmd("shell am start -n com.google.android.GoogleCamera/com.android.camera.CameraActivity").communicate()
+        self.d.server.adb.cmd("shell am start -n com.android.camera2/com.android.camera.CameraLauncher").communicate()
         self.d.wait.update()
     def teardown(self):
         """This method is run once after _each_ test method is executed"""
