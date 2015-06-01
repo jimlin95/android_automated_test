@@ -19,6 +19,7 @@ def registerSysWatchers(d):
     d.watcher("NEXT").when(text="NEXT").when(text="NEXT").click(text="NEXT")
     d.watcher("Accept").when(text="Accept").when(text="Accept").click(text="Accept")
     d.watcher("OK").when(text="OK").when(text="OK").click(text="OK")
+    d.watcher("GOT IT").when(text="GOT IT").when(text="GOT IT").click(text="GOT IT")
 
 def checkSystemWatchers(d):
     if d.watcher("AUTO_FC_WHEN_ANR").triggered:
