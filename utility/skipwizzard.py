@@ -32,10 +32,11 @@ def skip_setupwizzard(d):
     
     # Set Up Wi-Fi
     d(text="OK").click()
-
+    d.wait.update()
     ap_name = "dlink-549"
     ap_password = "38017549"
     timeout = 15000
+    time.sleep(2) 
     d(text=ap_name).click()
     
     d(resourceId='com.android.settings:id/password').set_text(ap_password)

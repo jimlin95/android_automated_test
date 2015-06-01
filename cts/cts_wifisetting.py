@@ -17,7 +17,9 @@ def SetWifiConnect(self,ap_name,ap_password):
         self(text=u'Connect').click()
         self(text=u'Connected').wait.exists(timeout=15000)
 def ModifyNetwork(self,ap_name):
-        #d.server.adb.cmd("shell am start -a android.intent.action.MAIN -n com.android.settings/.wifi.WifiSettings").communicate()
+        self.server.adb.cmd("shell am start -a android.intent.action.MAIN -n com.android.settings/.wifi.WifiSettings").communicate()
+        self.wait.update()
+        time.sleep(2)
         #long press ap_name 
         self(text=ap_name).long_click()
         self(text=u'Modify network').click.wait()
@@ -28,16 +30,16 @@ def ModifyNetwork(self,ap_name):
         self.wait.update()
         self(text=u'DHCP').click()
         self(text=u'Static').click.wait()
-        self(className="android.widget.ScrollView").scroll.vert.to(text=u'DNS 1')
+        self(className="android.widget.ScrollView").scroll.vert.to(text=u'DNS 2')
         self.wait.update()
         ip_addr=self(resourceId='com.android.settings:id/ipaddress').text
         self(resourceId='com.android.settings:id/ipaddress').set_text(ip_addr)
         self.press.enter()
 
-        self.wait.update()
-        self(scrollable=True).scroll.vert.to(text=u'DNS 1')
-        self(resourceId='com.android.settings:id/dns1').clear_text()
-        self.press.enter()
+        #self.wait.update()
+        #self(scrollable=True).scroll.vert.to(text=u'DNS 1')
+        #self(resourceId='com.android.settings:id/dns1').clear_text()
+        #self.press.enter()
 
         self.wait.update()
         #self(resourceId='com.android.settings:id/dns1').set_text("8.8.8.8")
@@ -70,6 +72,6 @@ if __name__ == '__main__':
     d.wakeup()
     d.press.home()
     #print_dict(d.info)
-    SetWifiConnect(d,u'dlink-549',u'38017549')
+#    SetWifiConnect(d,u'dlink-549',u'38017549')
     ModifyNetwork(d,u'dlink-549')
     # Press the HOME button to start the test from the home screen

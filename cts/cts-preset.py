@@ -17,6 +17,9 @@ ap_password = '38017549'
 # Connect to device with the IP received as a parameter
 d = Device()
 print u'Start to Skip setup wizzard'
+d.watcher("OK").when(text="OK").when(text="OK").click(text="OK")
+d.watcher("Ok").when(text="Ok").when(text="Ok").click(text="Ok")
+d.watcher("GOT IT").when(text="GOT IT").when(text="GOT IT").click(text="GOT IT")
 skip_setupwizzard(d)
 # Press the HOME button to start the test from the home screen
 d.press.home()
@@ -29,7 +32,7 @@ print u'Start to Change the TimeZone to GMT + 00:00'
 timezone=u'Azores'
 setTimezone(d,timezone)
 print u'Start to Connect device to Wifi'
-SetWifiConnect(d,ap_name,ap_password)
+#SetWifiConnect(d,ap_name,ap_password)
 print u'Start to Modify the network to fit CTS\'s requirement'
 ModifyNetwork(d,ap_name)
 # Press the HOME button to start the test from the home screen
@@ -37,5 +40,7 @@ d.press.home()
 print u'Start to Run Chrome browser & confirm the settings'
 set_chrome(d)
 print u'Run Chrome browser & confirm the settings --- Done'
+d.watchers.remove()
 d.press.home()
+d(text="GOT IT").click()
 
