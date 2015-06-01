@@ -42,7 +42,11 @@ def getparas(section,key):
         configParser.read(configFilePath)
     else:
         print("Configuration file 'unittest.ini not found")
-    return configParser.get(section,key)
+    section_exist = configParser.has_option(section,key)
+    if section_exist:
+        return configParser.get(section,key)
+    else:
+        return ""
 
 def start_activity(d,activity):
     d.server.adb.cmd("shell am start -n" + activity).communicate()
