@@ -16,6 +16,7 @@ def skip_setupwizzard(d):
         except:
             pass 
     print("System ready")
+    d.wakeup()
     # page 1
     d(resourceId='com.google.android.setupwizard:id/start').wait.exists(timeout=120000)
     d(resourceId='com.google.android.setupwizard:id/start').click()
