@@ -7,7 +7,7 @@ from uiautomator import Device
 
 def setTimezone(self,tz):        
 	# call Date & Time settings
-	self.server.adb.cmd("shell am start -a android.settings.DATE_SETTINGS")
+	self.server.adb.cmd("shell am start -a android.settings.DATE_SETTINGS").communicate()
 	ret = self(text=u'Select time zone').click()
 	if ret == False:
 		print("Can not find \"Select time zone\"")

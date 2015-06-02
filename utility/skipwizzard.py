@@ -6,7 +6,7 @@ import time
 from uiautomator import Device
 from common import  *
 def skip_setupwizzard(d):
-    os.system("../flash_script/adb wait-for-device")
+    d.server.adb.cmd("wait-for-device").communicate()
     # wait system server ready
     timeout =30 
     while not d.server.alive and timeout > 0:
@@ -50,9 +50,15 @@ def skip_setupwizzard(d):
     ap_password = "38017549"
     timeout = 15000
     time.sleep(2) 
+    d.wait.update()
     d(text=ap_name).click()
-    
-    d(resourceId='com.android.settings:id/password').set_text(ap_password)
+    d.wait.update()
+    if d(text=ap_name).exists:
+        d(resourceId='com.android.settings:id/password').set_text(ap_password)
+    else:
+        d.press.back()
+        d(text=ap_name).click()
+        d(resourceId='com.android.settings:id/password').set_text(ap_password)
     d(text=u'Connect').click()
     ret = d(text=u'Connected').wait.exists(timeout=timeout)
     if ret:
