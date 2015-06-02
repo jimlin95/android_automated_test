@@ -6,9 +6,8 @@ import time
 from uiautomator import Device
 from common import  *
 def skip_setupwizzard(d):
-    d.server.adb.cmd("wait-for-device").communicate()
     # wait system server ready
-    timeout =30 
+    timeout =60 
     while not d.server.alive and timeout > 0:
         sleep(10)
         timeout -= 1
