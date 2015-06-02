@@ -25,7 +25,7 @@ NULL_DEV=/dev/null
 #-----------------------------------------------------------------------------------------------------
 rnd=$RANDOM
 date=`date +%y%m%d`
-IMAGE_PATH=../out/target/product/byt_t_crv2
+IMAGE_PATH=.
 
 PARTITION=${IMAGE_PATH}/partition.tbl
 ESPIMG=${IMAGE_PATH}/esp.img
@@ -79,29 +79,29 @@ CHOICE()
   case $choice in 
    0)
 	echo "Flash All images with blankphone "
-	sudo ./fastboot.pft oem wipe ESP
-	sudo ./fastboot.pft oem wipe reserved
-	sudo ./fastboot.pft oem start_partitioning
-	sudo ./fastboot.pft flash /tmp/partition.tbl $PARTITION
-	sudo ./fastboot.pft oem partition /tmp/partition.tbl
-	sudo ./fastboot.pft erase system
-	sudo ./fastboot.pft format cache
-	sudo ./fastboot.pft format config
-	sudo ./fastboot.pft format logs
-	sudo ./fastboot.pft format data
-	sudo ./fastboot.pft format factory
-	sudo ./fastboot.pft format addon
-	sudo ./fastboot.pft oem stop_partitioning
-	sudo ./fastboot.pft flash ESP $ESPIMG
-	sudo ./fastboot.pft flash fastboot $DROIDBOOT
+	./fastboot.pft oem wipe ESP
+	./fastboot.pft oem wipe reserved
+	./fastboot.pft oem start_partitioning
+	./fastboot.pft flash /tmp/partition.tbl $PARTITION
+	./fastboot.pft oem partition /tmp/partition.tbl
+	./fastboot.pft erase system
+	./fastboot.pft format cache
+	./fastboot.pft format config
+	./fastboot.pft format logs
+	./fastboot.pft format data
+	./fastboot.pft format factory
+	./fastboot.pft format addon
+	./fastboot.pft oem stop_partitioning
+	./fastboot.pft flash ESP $ESPIMG
+	./fastboot.pft flash fastboot $DROIDBOOT
 	#blankphone ends here
 	#image starts here
-	sudo ./fastboot.pft flash esp_update $ESPZIP
-	sudo ./fastboot.pft flash system $SYSTEM_IMG
-	sudo ./fastboot.pft flash boot $KERNEL
-	sudo ./fastboot.pft flash recovery $RECOVERY
-	sudo ./fastboot.pft flash addon $ADDON_IMG
-	sudo ./fastboot.pft continue
+	./fastboot.pft flash esp_update $ESPZIP
+	./fastboot.pft flash system $SYSTEM_IMG
+	./fastboot.pft flash boot $KERNEL
+	./fastboot.pft flash recovery $RECOVERY
+	./fastboot.pft flash addon $ADDON_IMG
+	./fastboot.pft continue
 
     ;;
 
@@ -109,94 +109,94 @@ CHOICE()
 	echo "Flash All images"
 	#blankphone ends here
 	#image starts here
-	sudo ./fastboot.pft erase system
-	sudo ./fastboot.pft format cache
-	sudo ./fastboot.pft format config
-	sudo ./fastboot.pft format logs
-	sudo ./fastboot.pft format data
-	sudo ./fastboot.pft format factory
-	sudo ./fastboot.pft format addon
-	sudo ./fastboot.pft flash esp_update $ESPZIP
-	sudo ./fastboot.pft flash system $SYSTEM_IMG
-	sudo ./fastboot.pft flash boot $KERNEL
-	sudo ./fastboot.pft flash recovery $RECOVERY
-	sudo ./fastboot.pft flash addon $ADDON_IMG
-	sudo ./fastboot.pft continue
+	./fastboot.pft erase system
+	./fastboot.pft format cache
+	./fastboot.pft format config
+	./fastboot.pft format logs
+	./fastboot.pft format data
+	./fastboot.pft format factory
+	./fastboot.pft format addon
+	./fastboot.pft flash esp_update $ESPZIP
+	./fastboot.pft flash system $SYSTEM_IMG
+	./fastboot.pft flash boot $KERNEL
+	./fastboot.pft flash recovery $RECOVERY
+	./fastboot.pft flash addon $ADDON_IMG
+	./fastboot.pft continue
 	;;
  
   2)
     echo "Flash ESP image"
-	sudo ./fastboot.pft flash ESP $ESPIMG
+	./fastboot.pft flash ESP $ESPIMG
     ;;
  
   3)
 	echo "Flash kernel image only"
-	sudo ./fastboot.pft flash boot $KERNEL
+	./fastboot.pft flash boot $KERNEL
     ;;
  
   4)
 	echo "Flash droidboot image"
-	sudo ./fastboot.pft flash fastboot $DROIDBOOT
+	./fastboot.pft flash fastboot $DROIDBOOT
    ;;
  
   5)
 	echo "Flash kernel image with system image "
-	sudo ./fastboot.pft flash system $SYSTEM_IMG
-	sudo ./fastboot.pft flash boot $KERNEL
-	sudo ./fastboot.pft flash recovery $RECOVERY
+	./fastboot.pft flash system $SYSTEM_IMG
+	./fastboot.pft flash boot $KERNEL
+	./fastboot.pft flash recovery $RECOVERY
     ;;
  
   6)
 	echo "Flash system img "
-	sudo ./fastboot.pft erase system
-	sudo ./fastboot.pft flash system $SYSTEM_IMG
+	./fastboot.pft erase system
+	./fastboot.pft flash system $SYSTEM_IMG
 
     ;;
 
   7)
 	echo "Flash userdata.img "
-	sudo ./adb reboot-bootloader
-	sudo ./fastboot.pft format data 
-	sudo ./fastboot.pft reboot
+	./adb reboot-bootloader
+	./fastboot.pft format data 
+	./fastboot.pft reboot
     ;;
 
   8)
 	echo "Flash cache.img "
-	sudo ./adb reboot-bootloader
-	sudo ./fastboot flash cache $CACHE
-	sudo ./fastboot reboot
+	./adb reboot-bootloader
+	./fastboot flash cache $CACHE
+	./fastboot reboot
     ;;
 
   9)
 	echo "Flash Recovery image "
-	sudo ./fastboot.pft flash recovery $RECOVERY
+	./fastboot.pft flash recovery $RECOVERY
     ;;
 
   g | G)
   	echo "write partition"
-	sudo ./adb reboot-bootloader
-	sudo ./fastboot flash partition $GPT  
+	./adb reboot-bootloader
+	./fastboot flash partition $GPT  
     ;;
 
   r | R)
 	echo "fastboot reboot"
-    sudo ./fastboot.pft reboot 
+    ./fastboot.pft reboot 
     ;;
 
   x | X)
 	echo "Enter fastboot mode from DnX"
-	sudo ./fastboot.pft flash osloader $LOADER
-	sudo ./fastboot.pft boot $DROIDBOOT
+	./fastboot.pft flash osloader $LOADER
+	./fastboot.pft boot $DROIDBOOT
     ;;
   f | F)
 	echo "Enter fastboot mode"
-	sudo ./adb reboot bootloader
+	./adb reboot bootloader
     ;;
 
   l | L)
 	echo "List USB devices "
 	lsusb 
-	sudo ./fastboot.pft devices
+	./fastboot.pft devices
     ;;
 
   q | Q)

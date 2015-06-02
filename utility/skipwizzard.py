@@ -6,7 +6,19 @@ import time
 from uiautomator import Device
 from common import  *
 def skip_setupwizzard(d):
+    os.system("adb wait-for-device")
+    # wait system server ready
+    timeout =30 
+    while not d.server.alive and timeout > 0:
+        sleep(10)
+        timeout -= 1
+        try:
+            d.server.start()
+        except:
+            pass 
+    print("System ready")
     # page 1
+    d(resourceId='com.google.android.setupwizard:id/start').wait.exists(timeout=120000)
     d(resourceId='com.google.android.setupwizard:id/start').click()
 
 
@@ -17,10 +29,11 @@ def skip_setupwizzard(d):
     # page 3 Date& Time
     d(resourceId='com.google.android.setupwizard:id/setup_wizard_navbar_next').click()
     # page 4 Name
-    d(resourceId="com.google.android.setupwizard:id/first_name_edit").set_text("LCBU")
-    d.press.enter()
-    d(resourceId="com.google.android.setupwizard:id/last_name_edit").set_text("Quanta")
-    d.press.enter()
+    #d(resourceId="com.google.android.setupwizard:id/first_name_edit").set_text("LCBU")
+    #d.press.enter()
+    #d(resourceId="com.google.android.setupwizard:id/last_name_edit").set_text("Quanta")
+    #d.press.enter()
+    d.wait.update()
     d.press.back()
     d(resourceId='com.google.android.setupwizard:id/setup_wizard_navbar_next').click()
     # page 5 Google Services More
@@ -47,6 +60,7 @@ def skip_setupwizzard(d):
     else:
         ret = d(text=u'Connected').wait.exists(timeout=timeout)
         d.press.back()
+    d(text=u'GOT IT').click()
 if __name__ == '__main__':
     d = Device()
     skip_setupwizzard(d) 
