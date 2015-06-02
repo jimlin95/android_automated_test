@@ -7,18 +7,29 @@ from uiautomator import Device
 from common import  *
 def skip_setupwizzard(d):
     # wait system server ready
-    timeout =200 
-    while not d.server.alive and timeout > 0:
-        sleep(10)
+    timeout =50 
+    while (not d.server.alive) and (timeout > 0):
+        time.sleep(10)
         timeout -= 1
         try:
             d.server.start()
+            print("try to start")
+        except:
+            pass 
+    print ("timeout =%d" %timeout)
+    timeout =20 
+    while (not d.server.alive) and (timeout > 0):
+        time.sleep(10)
+        timeout -= 1
+        try:
+            d.server.start()
+            print("try to start")
         except:
             pass 
     print ("timeout =%d" %timeout)
     print("System ready")
     # page 1
-    d(resourceId='com.google.android.setupwizard:id/start').wait.exists(timeout=120000)
+    #d(resourceId='com.google.android.setupwizard:id/start').wait.exists(timeout=120000)
     d(resourceId='com.google.android.setupwizard:id/start').click()
 
 
