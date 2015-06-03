@@ -25,7 +25,7 @@ NULL_DEV=/dev/null
 #-----------------------------------------------------------------------------------------------------
 rnd=$RANDOM
 date=`date +%y%m%d`
-IMAGE_PATH=../collect
+IMAGE_PATH=../../collect
 
 PARTITION=${IMAGE_PATH}/partition.tbl
 ESPIMG=${IMAGE_PATH}/esp.img
