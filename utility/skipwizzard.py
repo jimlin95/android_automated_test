@@ -80,7 +80,7 @@ def skip_setupwizzard(d):
     else:
         ret = d(text=u'Connected').wait.exists(timeout=timeout)
         d.press.back()
-    d(text=u'GOT IT').click()
+    #d(text=u'GOT IT').click()
 if __name__ == '__main__':
     d = Device()
     skip_setupwizzard(d) 
