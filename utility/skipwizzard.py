@@ -27,10 +27,8 @@ def skip_setupwizzard(d):
             if ret:
                 break
             d.server.start()
-        except IOError:
-            pass
         except:
-            d.server.start()
+            pass
     print ("timeout =%d" %timeout)
     print("System ready")
     print("server status = %s" % d.server.alive)
