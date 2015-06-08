@@ -7,10 +7,10 @@ from uiautomator import Device
 from common import  *
 def skip_setupwizzard(d):
     # wait system server ready
-    timeout =50 
-    while not d.server.alive and timeout > 0 :
+    loop =50 
+    while not d.server.alive and loop > 0 :
         time.sleep(10)
-        timeout -= 1
+        loop -= 1
         try:
             d.server.start()
             print("try to start")
@@ -18,30 +18,37 @@ def skip_setupwizzard(d):
         except:
             print("pass")
             pass 
-    print ("timeout =%d" %timeout)
-    timeout=50
-    while timeout>0:
+    print ("loop =%d" %loop)
+    loop=100
+    while loop>0:
+        time.sleep(3)
+        loop -= 1
+        print ("loop =%d" %loop)
         try:
-            ret = d(resourceId='com.google.android.setupwizard:id/start').wait.exists(timeout=10000)
-            timeout -= 1
+            d.wakeup()
+            ret = d(resourceId='com.google.android.setupwizard:id/start').wait.exists(timeout=5000)
             if ret:
+                print("Found it!!!")
                 break
             d.server.start()
         except:
+            print("pass1")
             pass
-    print ("timeout =%d" %timeout)
-    print("System ready")
-    print("server status = %s" % d.server.alive)
+    print("System ready,Go Go Go !!!")
+    #print("server status = %s" % d.server.alive)
+    d.wakeup()
     # page 1
     d(resourceId='com.google.android.setupwizard:id/start').click()
 
-
+    d.wait.update()
     d(resourceId='com.android.settings:id/setup_wizard_navbar_next').click()
     # page 2 (wifi)
     # page 2 sub page (wifi)
     d(resourceId='android:id/button2').click()
+    d.wait.update()
     # page 3 Date& Time
     d(resourceId='com.google.android.setupwizard:id/setup_wizard_navbar_next').click()
+    d.wait.update()
     # page 4 Name
     #d(resourceId="com.google.android.setupwizard:id/first_name_edit").set_text("LCBU")
     #d.press.enter()
@@ -50,12 +57,16 @@ def skip_setupwizzard(d):
     d.wait.update()
     d.press.back()
     d(resourceId='com.google.android.setupwizard:id/setup_wizard_navbar_next').click()
+    d.wait.update()
     # page 5 Google Services More
     d(resourceId='com.google.android.setupwizard:id/setup_wizard_navbar_next').click()
+    d.wait.update()
     # page 5 Google Services Next
     d(resourceId='com.google.android.setupwizard:id/setup_wizard_navbar_next').click()
+    d.wait.update()
     # page   Setup complete
     d(resourceId='com.google.android.setupwizard:id/setup_wizard_navbar_next').click()
+    d.wait.update()
     
     # Set Up Wi-Fi
     d(text="OK").click()
