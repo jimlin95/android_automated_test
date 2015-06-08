@@ -7,7 +7,7 @@ from uiautomator import Device
 from common import  *
 def skip_setupwizard(d):
     # wait system server ready
-    loop =50 
+    loop =100 
     while not d.server.alive and loop > 0 :
         time.sleep(10)
         loop -= 1
