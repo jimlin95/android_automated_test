@@ -5,7 +5,7 @@ import os
 
 from uiautomator import Device
 from cts_wifisetting import SetWifiConnect,ModifyNetwork
-from utility.skipwizzard import skip_setupwizzard
+from utility.skipwizzard import skip_setupwizard
 from cts_setchrome import set_chrome
 from utility.changelanguage import changeLanguage
 from utility.setsecurity import setSecurity
@@ -20,7 +20,7 @@ print u'Start to Skip setup wizzard'
 d.watcher("OK").when(text="OK").when(text="OK").click(text="OK")
 d.watcher("Ok").when(text="Ok").when(text="Ok").click(text="Ok")
 d.watcher("GOT IT").when(text="GOT IT").when(text="GOT IT").click(text="GOT IT")
-skip_setupwizzard(d)
+skip_setupwizard(d)
 # Press the HOME button to start the test from the home screen
 d.press.home()
 print u'Start to Change the settings in Developer'

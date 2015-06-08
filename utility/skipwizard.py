@@ -5,7 +5,7 @@ import os
 import time
 from uiautomator import Device
 from common import  *
-def skip_setupwizzard(d):
+def skip_setupwizard(d):
     # wait system server ready
     loop =50 
     while not d.server.alive and loop > 0 :
@@ -94,4 +94,4 @@ def skip_setupwizzard(d):
     #d(text=u'GOT IT').click()
 if __name__ == '__main__':
     d = Device()
-    skip_setupwizzard(d) 
+    skip_setupwizard(d) 
