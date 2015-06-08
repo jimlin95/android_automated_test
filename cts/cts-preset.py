@@ -5,7 +5,7 @@ import os
 
 from uiautomator import Device
 from cts_wifisetting import SetWifiConnect,ModifyNetwork
-from utility.skipwizzard import skip_setupwizard
+from utility.skipwizard import skip_setupwizard
 from cts_setchrome import set_chrome
 from utility.changelanguage import changeLanguage
 from utility.setsecurity import setSecurity
@@ -16,7 +16,7 @@ ap_password = '38017549'
 
 # Connect to device with the IP received as a parameter
 d = Device()
-print u'Start to Skip setup wizzard'
+print u'Start to Skip setup wizard'
 d.watcher("OK").when(text="OK").when(text="OK").click(text="OK")
 d.watcher("Ok").when(text="Ok").when(text="Ok").click(text="Ok")
 d.watcher("GOT IT").when(text="GOT IT").when(text="GOT IT").click(text="GOT IT")
