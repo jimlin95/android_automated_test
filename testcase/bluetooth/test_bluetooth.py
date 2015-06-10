@@ -27,7 +27,7 @@ class TestBluetooth(object):
     def teardown(self):
         """This method is run once after _each_ test method is executed"""
         u.teardown(self.d)
-    def test_TurnOffBluetooth(self):
+    def test_01_TurnOffBluetooth(self):
         print("Test to turn off bluetooth")
         # Turn off bluetooth 
         self.d.server.adb.cmd("shell am start -a android.intent.action.MAIN -n com.android.settings/.bluetooth.BluetoothSettings"). \
@@ -40,7 +40,7 @@ class TestBluetooth(object):
 
         assert self.d(text="OFF").exists
 
-    def test_TurnOnBluetooth(self):
+    def test_02_TurnOnBluetooth(self):
         print("Test to turn on bluetooth")
         # Turn off bluetooth 
         self.d.server.adb.cmd("shell am start -a android.intent.action.MAIN -n com.android.settings/.bluetooth.BluetoothSettings"). \
@@ -53,7 +53,7 @@ class TestBluetooth(object):
  
         assert self.d(text="ON").exists
 
-    def test_Search_Bluetooth_Devices(self):
+    def test_03_Search_Bluetooth_Devices(self):
         print("Test to search BT Devices")
         #================================
         # get params from unittest.ini
@@ -86,7 +86,7 @@ class TestBluetooth(object):
 
         print("Number of devices has been found = " + str(avl-2))
         assert avl > 2 and  found == False
-    def test_Check_Bluetooth_MAC_address(self):
+    def test_04_Check_Bluetooth_MAC_address(self):
         print("Check Bluetooth Mac address")
         self.d.server.adb.cmd("shell am start -n com.android.settings/.deviceinfo.Status").communicate()
         self.d.wait.update()
