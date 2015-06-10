@@ -17,6 +17,7 @@ def setSecurity(d):
 
 if __name__ == '__main__':
     d = Device()
+    d.wakeup()
     # Press the HOME button to start the test from the home screen
     d.press.home()
     setSecurity(d)

@@ -22,6 +22,7 @@ def setTimezone(self,tz):
 if __name__ == '__main__':
         # Connect to device with the IP received as a parameter
         d = Device()
+        d.wakeup()
         d.press.home()
 #        timezone=u'London, Dublin'
         timezone=u'Azores'
