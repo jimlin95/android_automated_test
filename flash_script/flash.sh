@@ -91,7 +91,7 @@ CHOICE()
 	./fastboot.pft format config
 	./fastboot.pft format logs
 	./fastboot.pft format data
-	./fastboot.pft format factory
+	#./fastboot.pft format factory
 	./fastboot.pft format addon
 	./fastboot.pft oem stop_partitioning
 	./fastboot.pft flash ESP $ESPIMG
