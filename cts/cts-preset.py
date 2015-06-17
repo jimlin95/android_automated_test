@@ -20,8 +20,9 @@ print u'Start to Skip setup wizard'
 d.watcher("OK").when(text="OK").when(text="OK").click(text="OK")
 d.watcher("Ok").when(text="Ok").when(text="Ok").click(text="Ok")
 d.watcher("GOT IT").when(text="GOT IT").when(text="GOT IT").click(text="GOT IT")
-skip_setupwizard(d)
+#skip_setupwizard(d)
 # Press the HOME button to start the test from the home screen
+d.wakeup()
 d.press.home()
 print u'Start to Change the settings in Developer'
 ChangeDeveloper_settings(d)
@@ -42,5 +43,5 @@ set_chrome(d)
 print u'Run Chrome browser & confirm the settings --- Done'
 d.watchers.remove()
 d.press.home()
-d(text="GOT IT").click()
+#d(text="GOT IT").click()
 
