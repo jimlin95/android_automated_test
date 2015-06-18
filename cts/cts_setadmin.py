@@ -6,9 +6,10 @@ from uiautomator import Device
 from common import  *
  
 def enable_device_admin_setting(vc, name):
-    checkbox = d(className="android.widget.ListView",resourceId="android:id/list").\
-            child_by_text(name,className="android.widget.LinearLayout").\
-            child(className="android.widget.CheckBox")
+    #checkbox = d(className="android.widget.ListView",resourceId="android:id/list").\
+    #        child_by_text(name,className="android.widget.LinearLayout").\
+    #        child(className="android.widget.CheckBox")
+    checkbox = d(text=name).right(className="android.widget.CheckBox")
     if checkbox.checked == False:
         print (name + " not enabled, enabling it")
         checkbox.click()
@@ -30,5 +31,6 @@ def set_device_admins(self):
 if __name__ == '__main__':
     d = Device()
     # Press the HOME button to start the test from the home screen
+    d.wakeup()
     d.press.home()
     set_device_admins(d)
